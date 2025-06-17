@@ -25,8 +25,7 @@ def get_pokemon(name):
     response = requests.get(
         url=url
     )
-    r_dict = response.json()
-    print(r_dict['name'])
+    return response
 
 if __name__ == "__main__":
     get_pokemon("bulbasaur")

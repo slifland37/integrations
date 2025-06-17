@@ -6,7 +6,7 @@ class TestGetPokemon:
     def test_getpokemon(self):
         responses.add(
             method=responses.GET,
-            url='https://bogus',
+            url='https://pokeapi.co/api/v2/pokemon/bulbasaur',
             json={'id':1, 'name':'bulbasaur'}
         )
 
