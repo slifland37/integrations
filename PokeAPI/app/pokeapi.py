@@ -1,7 +1,6 @@
 import requests
 from dotenv import load_dotenv
 from urllib.parse import urljoin
-from types import MappingProxyType
 from dataclasses import dataclass
 from typing import Final, Callable
 import argparse
