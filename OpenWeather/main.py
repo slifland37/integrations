@@ -2,6 +2,7 @@ import requests
 import os
 from dotenv import load_dotenv
 import argparse
+from unidecode import unidecode
 
 load_dotenv()
 BASE_URL = "http://api.weatherstack.com/current"
@@ -48,6 +49,10 @@ def get_weather(city=None, lat=None, lon=None):
         return
     
     # Build initial query
+    if isinstance(city, list):
+        city = [unidecode(c) for c in city]
+    elif city:
+        city = unidecode(city)
     query = build_query_param(city, lat, lon)
     
     print(f"Query being sent to API: {query}")
