@@ -546,6 +546,33 @@ class TestWeatherFunctions(unittest.TestCase):
                     mock_get.reset_mock()
                     mock_print.reset_mock()
 
+class TestWeatherAPI(unittest.TestCase):
+    
+    def test_koln(self):
+        """Test Koln"""
+        # This test requires a real API key and makes an actual API call        
+        # Capture the printed output
+        from io import StringIO
+        import sys
+        
+        captured_output = StringIO()
+        sys.stdout = captured_output
+        
+        try:
+            # Make the actual API call with "Köln"
+            get_weather(city="Köln")
+        except Exception as e:
+            # If API key is missing or other issues, skip the test
+            self.skipTest(f"API test skipped due to: {e}")
+        finally:
+            sys.stdout = sys.__stdout__
+        
+        # Get the captured output
+        output = captured_output.getvalue()
+        
+        # Verify the API returned Kolno, Poland (the expected result for "Koln")
+        self.assertIn("Kolno", output)
+
 class TestWeatherIntegration(unittest.TestCase):
     """Integration tests that can be run with real API (optional)"""
     

@@ -46,7 +46,13 @@ def get_weather(city=None, lat=None, lon=None):
     if not api_key:
         print("Missing WEATHERSTACK_API_KEY in .env file.")
         return
+    
+    # Build initial query
     query = build_query_param(city, lat, lon)
+    
+    print(f"Query being sent to API: {query}")
+    
+    print()
     params = {
         "access_key": api_key,
         "query": query
