@@ -4,15 +4,33 @@ import responses
 class TestGetPokemon:
     @responses.activate
     def test_getpokemon(self):
+
+        mock_response_payload={
+            'id':1, 
+            'name':'bulbasaur', 
+            'base_experience': 15, 
+            'height': 10, 
+            'weight': 100, 
+            'moves': [
+                {
+                    'move': {
+                        'name': 'tackle',
+                        'url': "foo"
+                    },
+                    'version_group_details': []
+                }
+            ]
+        }
+
         responses.add(
             method=responses.GET,
             url='https://pokeapi.co/api/v2/pokemon/bulbasaur',
-            json={'id':1, 'name':'bulbasaur'}
+            json=mock_response_payload
         )
 
         response = pokeapi.get_pokemon('bulbasaur')
-        print(response)
-        assert response.json() == {'id':1, 'name':'bulbasaur'}
+        assert response.name == 'bulbasaur'
+        assert response.base_experience == 15
 
 
 

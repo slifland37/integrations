@@ -1,3 +1,7 @@
+import sys
+for p in sys.path:
+    print(p)
+
 import requests
 from dotenv import load_dotenv
 from urllib.parse import urljoin
@@ -26,9 +30,7 @@ def get_pokemon(name):
     )
     response_dict = response.json()
     pokemon = Pokemon(**response_dict)
-    print(f"Fetched pokemon: {pokemon.name}, ({pokemon.id:03})")
-    print(f"Getting move...")
-    get_move(pokemon)
+    return pokemon
 
 def get_move(pokemon: Pokemon):
     url = pokemon.moves[0].move.url
@@ -36,6 +38,7 @@ def get_move(pokemon: Pokemon):
     response = requests.get(url=url)
     move = Move(**response.json())
     print(f"Fetched move: {move.name} ({move.id})")
+    return move
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser("Get a pokemon, along with a list of their moves")
@@ -43,4 +46,5 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
     name = args.name
-    get_pokemon(name)
+    pokemon = get_pokemon(name)
+    move = get_move(pokemon)
