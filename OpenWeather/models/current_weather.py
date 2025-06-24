@@ -3,46 +3,76 @@ from typing import List, Optional, Annotated
 from enum import Enum
 
 class Units(str, Enum):
-    standard = "standard"
-    metric = "metric"
-    imperial = "imperial"
+    metric = "m"
+    scientific = "s"
+    fahrenheit = "f"
 
-class WeatherReportParams(BaseModel):
-    lat: Annotated[float, Field(ge=-90, le=90)]
-    lon: Annotated[float, Field(ge=-180, le=180)]
-    appid: str
-    units: Units
-    exclude: Optional[str] = None
+class WeatherstackRequest(BaseModel):
+    type: str
+    query: str
+    language: str
+    unit: str
 
-class WeatherDescription(BaseModel):
-    id: int
-    main: str
-    description: str
+class WeatherstackLocation(BaseModel):
+    name: str
+    country: str
+    region: str
+    lat: str
+    lon: str
+    timezone_id: str
+    localtime: str
+    localtime_epoch: int
+    utc_offset: str
 
-class WeatherCurrent(BaseModel):
-    sunrise: int
-    sunset: int
-    temp: float
-    feels_like: float
-    humidity: float
-    weather: List[WeatherDescription]
+class WeatherstackAstro(BaseModel):
+    sunrise: str
+    sunset: str
+    moonrise: str
+    moonset: str
+    moon_phase: str
+    moon_illumination: int
 
-class WeatherForecastDailyTemp(BaseModel):
-    morn: float
-    day: float
-    eve: float
-    night: float
+class WeatherstackAirQuality(BaseModel):
+    co: str
+    no2: str
+    o3: str
+    so2: str
+    pm2_5: str
+    pm10: str
+    us_epa_index: str = Field(alias="us-epa-index")
+    gb_defra_index: str = Field(alias="gb-defra-index")
 
-class WeatherForecastDaily(BaseModel):
-    dt: int
-    summary: str
-    temp: WeatherForecastDailyTemp
+class WeatherstackCurrent(BaseModel):
+    observation_time: str
+    temperature: int
+    weather_code: int
+    weather_icons: List[str]
+    weather_descriptions: List[str]
+    wind_speed: int
+    wind_degree: int
+    wind_dir: str
+    pressure: int
+    precip: float
+    humidity: int
+    cloudcover: int
+    feelslike: int
+    uv_index: int
+    visibility: int
+    astro: Optional[WeatherstackAstro] = None
+    air_quality: Optional[WeatherstackAirQuality] = None
 
-class WeatherReport(BaseModel):
-    lat: float
-    lon: float
-    timezone: str
-    current: WeatherCurrent
-    daily: List[WeatherForecastDaily]
+class WeatherstackResponse(BaseModel):
+    request: WeatherstackRequest
+    location: WeatherstackLocation
+    current: WeatherstackCurrent
+
+class WeatherstackError(BaseModel):
+    code: int
+    type: str
+    info: str
+
+class WeatherstackErrorResponse(BaseModel):
+    success: bool = False
+    error: WeatherstackError
 
 
