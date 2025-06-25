@@ -1,0 +1,9 @@
+# General
+- Set up consistent formatting rules
+
+# PokeAPI
+- Implement async fetching
+- Understand requests.sessions
+- Figure out how to self-throttle requests
+- Figure out how to cache responses
+- Figure out if any concept of generics (unnamed vs named resource list, make request)
