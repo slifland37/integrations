@@ -1,21 +1,15 @@
 from pydantic import BaseModel
-from typing import Optional, List
-
-class NamedResource(BaseModel):
-    name: str
-    url: str
+from typing import Optional, List, Generic, TypeVar
 
 class UnnamedResource(BaseModel):
     url: str
 
-class NamedResourceList(BaseModel):
-    count: int
-    next: Optional[str]
-    previous: Optional[str]
-    results: List[NamedResource]
+class NamedResource(UnnamedResource):
+    name: str
 
-class UnnamedResourceList(BaseModel):
+T = TypeVar("T", bound=UnnamedResource)
+class ResourceList(BaseModel, Generic[T]):
     count: int
     next: Optional[str]
     previous: Optional[str]
-    results: List[UnnamedResource]
+    results: List[T]

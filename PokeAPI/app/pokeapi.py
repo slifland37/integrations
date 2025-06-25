@@ -7,7 +7,7 @@ from pydantic import BaseModel
 import argparse
 from app.models.pokemon import Pokemon, Move
 from app.models.request_params import PaginationParams
-from app.models.response_lists import NamedResourceList
+from app.models.response_lists import ResourceList, NamedResource
 
 load_dotenv()
 
@@ -49,7 +49,7 @@ class PokeAPI:
 
         while url and len(results) < count:
             response_dict = self._make_get_request(url, params)
-            pokemon_list = NamedResourceList(**response_dict)
+            pokemon_list = ResourceList[NamedResource](**response_dict)
             url = pokemon_list.next
             results += pokemon_list.results
             params = None # Only needed for first request
@@ -89,6 +89,6 @@ if __name__ == "__main__":
     # pokemon = client.get_pokemon(name)
     # if pokemon:
     #     move = client.get_move(pokemon)
-    pokemon_list = client.list_pokemon(45)
+    pokemon_list = client.list_pokemon(5)
     for p in pokemon_list:
         print(f"Name: {p.name}; URL: {p.url}")
