@@ -1,27 +1,30 @@
-import requests
-from dotenv import load_dotenv
-from urllib.parse import urljoin
-from dataclasses import dataclass
-from typing import Final, Callable, List
-from pydantic import BaseModel
 import argparse
-from app.models.pokemon import Pokemon, Move
+from dataclasses import dataclass
+from typing import Callable, Final, List
+from urllib.parse import urljoin
+
+import requests
+from app.models.pokemon import Move, Pokemon
 from app.models.request_params import PaginationParams
-from app.models.response_lists import ResourceList, NamedResource
+from app.models.response_lists import NamedResource, ResourceList
+from dotenv import load_dotenv
+from pydantic import BaseModel
 
 load_dotenv()
 
 BASE_URL: Final = "https://pokeapi.co/api/v2/"
+
 
 @dataclass(frozen=True)
 class Endpoints:
     get_pokemon: Callable[[str], str]
     list_pokemon: str
 
+
 ENDPOINTS: Final = Endpoints(
-    get_pokemon=lambda name: f"pokemon/{name}",
-    list_pokemon="pokemon"
+    get_pokemon=lambda name: f"pokemon/{name}", list_pokemon="pokemon"
 )
+
 
 class PokeAPI:
     def __init__(self):
@@ -40,9 +43,9 @@ class PokeAPI:
         return move
 
     def list_pokemon(self, count: int = 20) -> List:
-        '''
+        """
         Returns the first n pokemon
-        '''
+        """
         url = urljoin(BASE_URL, ENDPOINTS.list_pokemon)
         params = PaginationParams(limit=count)
         results = []
@@ -52,8 +55,8 @@ class PokeAPI:
             pokemon_list = ResourceList[NamedResource](**response_dict)
             url = pokemon_list.next
             results += pokemon_list.results
-            params = None # Only needed for first request
-            
+            params = None  # Only needed for first request
+
         return results
 
     def _make_get_request(self, url: str, params: dict | BaseModel = None) -> dict:
@@ -61,10 +64,7 @@ class PokeAPI:
             params = params.model_dump(exclude_none=True)
 
         try:
-            response = requests.get(
-                url=url,
-                params=params
-            )
+            response = requests.get(url=url, params=params)
             response.raise_for_status()
         except requests.exceptions.HTTPError:
             print(f"HTTP request failed: {url}")

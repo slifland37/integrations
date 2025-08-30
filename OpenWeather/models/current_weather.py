@@ -1,17 +1,21 @@
-from pydantic import BaseModel, Field
-from typing import List, Optional, Annotated
 from enum import Enum
+from typing import List, Optional
+
+from pydantic import BaseModel, Field
+
 
 class Units(str, Enum):
     metric = "m"
     scientific = "s"
     fahrenheit = "f"
 
+
 class WeatherstackRequest(BaseModel):
     type: str
     query: str
     language: str
     unit: str
+
 
 class WeatherstackLocation(BaseModel):
     name: str
@@ -24,6 +28,7 @@ class WeatherstackLocation(BaseModel):
     localtime_epoch: int
     utc_offset: str
 
+
 class WeatherstackAstro(BaseModel):
     sunrise: str
     sunset: str
@@ -31,6 +36,7 @@ class WeatherstackAstro(BaseModel):
     moonset: str
     moon_phase: str
     moon_illumination: int
+
 
 class WeatherstackAirQuality(BaseModel):
     co: str
@@ -41,6 +47,7 @@ class WeatherstackAirQuality(BaseModel):
     pm10: str
     us_epa_index: str = Field(alias="us-epa-index")
     gb_defra_index: str = Field(alias="gb-defra-index")
+
 
 class WeatherstackCurrent(BaseModel):
     observation_time: str
@@ -61,18 +68,19 @@ class WeatherstackCurrent(BaseModel):
     astro: Optional[WeatherstackAstro] = None
     air_quality: Optional[WeatherstackAirQuality] = None
 
+
 class WeatherstackResponse(BaseModel):
     request: WeatherstackRequest
     location: WeatherstackLocation
     current: WeatherstackCurrent
+
 
 class WeatherstackError(BaseModel):
     code: int
     type: str
     info: str
 
+
 class WeatherstackErrorResponse(BaseModel):
     success: bool = False
     error: WeatherstackError
-
-

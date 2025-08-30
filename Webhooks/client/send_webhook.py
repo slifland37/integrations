@@ -11,16 +11,16 @@ import requests
 from models.payload import WebhookPayload
 
 URL = "http://localhost:8000/webhook"
+
+
 def send_webhook_request():
 
-    payload = WebhookPayload(event="test_event", data={'message': 'hello from script'})
-    response = requests.post(
-        url=URL,
-        json=payload.model_dump()
-    )
+    payload = WebhookPayload(event="test_event", data={"message": "hello from script"})
+    response = requests.post(url=URL, json=payload.model_dump())
     response_payload = response.json()
     print("status: ", response.status_code)
-    print("data: ", response_payload['data'])
+    print("data: ", response_payload["data"])
+
 
 if __name__ == "__main__":
     send_webhook_request()
